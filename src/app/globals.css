@@ -2,20 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
 }
+
+h2{
+   @apply  text-4xl font-sans font-bold
+}
+
+h4 {
+  @apply  text-2xl font-sans font-semibold
+}
+
+/* === Buttons === */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200 w-48;
+}
+
+.btn-primary {
+  @apply bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-400;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-2 focus:ring-gray-400;
+}
+
+.btn-active {
+  @apply bg-blue-700 text-gray-300 hover:bg-blue-800 focus:ring-2 focus:ring-gray-400;
+}
+
+.btn-danger {
+  @apply bg-red-500 text-white hover:bg-red-600 focus:ring-2 focus:ring-red-400;
+}
+
+.btn-disabled {
+  @apply bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none;
+}
+
+/* === Tables === */
+.table {
+  @apply w-full border-collapse bg-white rounded-lg shadow-md overflow-hidden mb-4;
+}
+
+.table thead {
+  @apply text-left px-4 py-2 font-bold text-gray-700 border-b;
+}
+
+.table td {
+  @apply px-4 py-2 border-b border-l;
+}
+
+.table-row {
+  @apply hover:bg-gray-50 transition-colors;
+}
+
+/* === Forms === */
+.form {
+  @apply space-y-4 flex-col mb-4 w-2/3  rounded-md p-4 shadow-lg border;
+}
+
+
+/* === Inputs === */
+input {
+  @apply w-full px-3 py-2 border rounded-md shadow-sm text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none;
+}
+
+.input-error {
+  @apply border-red-500 text-red-700 bg-red-50;
+}
+
+.input-disabled {
+  @apply bg-gray-100 cursor-not-allowed;
+}
+
+/* === Textarea === */
+.textarea {
+  @apply w-full px-3 py-2 border rounded-md shadow-sm text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none;
+}
+
+/* === Checkbox === */
+.checkbox {
+  @apply w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400;
+}
+
+/* === Flex wrapper === */
+
+.flex-wrapper {
+  @apply flex items-center justify-center gap-4
+}
+

@@ -1,0 +1,38 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=rootpassword
+      - POSTGRES_DB=mytodoapp
+    volumes:
+      - my-todo-app_postgres-data:/var/lib/postgresql/data
+    networks:
+      - my-todo-app_default
+
+  nextjs:
+    image: node:18
+    container_name: nextjs
+    working_dir: /app
+    volumes:
+      - .:/app:rw
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+    command: ["sh", "-c", "npx prisma migrate deploy && npm test && npm run dev"]
+    networks:
+      - my-todo-app_default
+    depends_on:
+      - postgres
+
+volumes:
+  my-todo-app_postgres-data:
+
+networks:
+  my-todo-app_default:
+    driver: bridge
