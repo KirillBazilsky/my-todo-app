@@ -34,6 +34,7 @@ Run the following command:
 bash
 
 docker-compose -f docker-compose.development.yml up --build
+
 This will:
 
 Start a PostgreSQL container.
@@ -54,6 +55,7 @@ Run the following command:
 bash
 
 docker-compose up --build
+
 This will:
 
 Start a PostgreSQL container.
@@ -74,12 +76,14 @@ Ensure all dependencies are installed by running:
 bash
 
 npm install
+
 Then execute the tests:
 
 bash
 
 npm test
 Run Tests in Docker
+
 The nextjs container will automatically execute tests during startup. Ensure the docker-compose.development.yml file is used.
 
 Stopping the Application
@@ -111,6 +115,7 @@ Prisma migrations are applied automatically during container startup. If you nee
 bash
 
 npx prisma migrate deploy
+
 Static Files
 Nginx serves static files from:
 
