@@ -2,18 +2,21 @@
 
 import React, { FC, FormEvent, useState } from "react";
 import { createTask } from "@/client/api/tasks";
-import { useRouter } from "next/navigation";
 
 const TaskForm: FC = () => {
   const [title, setTitle] = useState("");
-  const router = useRouter();
 
-  const handleSubmit = async(e: FormEvent) => {
-
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await createTask(title).then(() => {
       setTitle("");
-      router.push("/")
+
+      const isProduction =
+        process.env.NODE_ENV !== "test" && typeof window !== "undefined";
+
+      if (isProduction && window.location.reload) {
+        window.location.reload();
+      }
     });
   };
 
