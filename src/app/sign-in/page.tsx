@@ -5,7 +5,7 @@ import SignInForm from "../components/auth/SignInForm";
 
 const SignInPage = () => {
   return (
-    <div className="flex-wrapper flex-col mt-20">
+    <div className="flex-wrapper flex-col mt-16">
       <SignInForm />
     </div>
   );
