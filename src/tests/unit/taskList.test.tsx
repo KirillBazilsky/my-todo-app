@@ -4,7 +4,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { getTasks, updateTaskStatus, deleteTask } from "@/client/api/tasks";
 import { TaskStatus } from "@prisma/client";
-import TaskList from "@/app/tasks/components/TaskList/TaskList";
+import TaskList from "@/app/components/tasks/TaskList";
 
 jest.mock("@/client/api/tasks", () => ({
   getTasks: jest.fn(),
@@ -16,7 +16,7 @@ const getTasksMock = getTasks as jest.Mock;
 const updateTaskStatusMock = updateTaskStatus as jest.Mock;
 const deleteTaskMock = deleteTask as jest.Mock;
 
-describe("TaskList Component",() => {
+describe("TaskList Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

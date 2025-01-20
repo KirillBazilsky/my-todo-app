@@ -1,15 +1,33 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { register } from "@/client/api/user"; // Ensure the correct import path
-import SignUpForm from "@/app/user/components/SignUpForm";
+import { register } from "@/client/api/user";
+import SignUpForm from "@/app/components/auth/SignUpForm";
+import { useRouter } from "next/navigation";
+
 
 jest.mock("@/client/api/user", () => ({
   register: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
+
+beforeAll(() => {
+  window.location = { reload: jest.fn() } as unknown as Location;
+});
+
 describe("SignUpForm", () => {
   it("should render the form inputs", () => {
+    const mockRouter = {
+      push: jest.fn(),
+      query: {},
+      pathname: "/sign-in",
+    };
+
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+
     render(<SignUpForm />);
 
     expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
@@ -59,6 +77,7 @@ describe("SignUpForm", () => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
       target: { value: formData.email },
     });
+
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: formData.password },
     });

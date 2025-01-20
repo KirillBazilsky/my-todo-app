@@ -7,20 +7,21 @@ export class TaskController {
   static async getTasks() {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user?.id) {
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = Number(session.user.id);
 
     const tasks = await TaskService.getAllTasksByUserId(userId);
+    
     return NextResponse.json(tasks);
   }
 
   static async createTask(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user?.id) {
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -39,7 +40,7 @@ export class TaskController {
   static async updateTask(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user?.id) {
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -62,7 +63,7 @@ export class TaskController {
   static async deleteTask(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user?.id) {
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

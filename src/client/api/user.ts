@@ -1,30 +1,17 @@
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import { errorManager } from "@/client/utils/errorManager";
-import { useEffect, useState } from "react";
-import { IUser } from "@/client/interfaces/user";
+import { API_REGISTER_URL, API_USER_URL } from "../constatnts/api";
 
-export function useUser() {
-  const [user, setUser] = useState<IUser | null>(null);
-  const [status, setStatus] = useState<string>("loading");
+export const getUser = async () => {
+  try {
+    const response = await axios.get(API_USER_URL);
 
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const response = await axios.get("/api/user"); 
-        setUser(response.data);
-        setStatus("authenticated");
-      } catch (error) {
-        setStatus("unauthenticated");
-        errorManager.notify(`Error fetching user data: ${error}`);
-      }
-    }
-
-    fetchUserData();
-  }, []);
-
-  return { user, status };
-}
+    return response.data
+  } catch (error) {
+    errorManager.notify(`Error fetching user data: ${error}`);
+  }
+};
 
 export const register = async (user: {
   email: string;
@@ -34,7 +21,7 @@ export const register = async (user: {
 }) => {
   try {
     const response = await axios.post(
-      "/api/register",
+      API_REGISTER_URL,
       {
         email: user.email,
         password: user.password,

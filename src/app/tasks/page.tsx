@@ -1,6 +1,6 @@
 import React from "react";
-import TaskList from "./components/TaskList/TaskList";
-import TaskForm from "./components/TaskForm/TaskForm";
+import TaskList from "@/app/components/tasks/TaskList";
+import TaskForm from "@/app/components/tasks/TaskForm";
 
 const TasksPage = () => {
   return (

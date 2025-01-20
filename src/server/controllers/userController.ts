@@ -8,7 +8,7 @@ export class UserController {
     try {
       const session = await getServerSession(authOptions);
 
-      if (!session || !session.user || !session.user.id) {
+      if (!session?.user) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
       }
 
@@ -24,6 +24,7 @@ export class UserController {
       return NextResponse.json(user, { status: 200 });
     } catch (error) {
       console.error("Error fetching user:", error);
+
       return NextResponse.json(
         { message: "Error fetching user" },
         { status: 500 }
@@ -35,7 +36,7 @@ export class UserController {
     try {
       const session = await getServerSession(authOptions);
 
-      if (!session || !session.user || !session.user.id) {
+      if (!session?.user) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
       }
 
@@ -47,6 +48,7 @@ export class UserController {
       return NextResponse.json(updatedUser, { status: 200 });
     } catch (error) {
       console.error("Error updating user:", error);
+      
       return NextResponse.json(
         { message: "Error updating user" },
         { status: 500 }

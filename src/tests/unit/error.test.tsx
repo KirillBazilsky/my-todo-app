@@ -2,7 +2,7 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useGlobalState } from "@/client/context/GlobalStateContext";
-import GlobalErrorModal from "@/app/component/Error/Error";
+import GlobalErrorModal from "@/app/components/error/Error";
 
 jest.mock("@/client/context/GlobalStateContext", () => ({
   useGlobalState: jest.fn(),

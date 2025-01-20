@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-
+        
         if (
           !user ||
           !(await bcrypt.compare(credentials.password, user.password))
@@ -42,6 +42,10 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/sign-in",
+    error: "/auth/error",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -55,9 +59,10 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
       }
+
       return session;
     },
   },
-  pages: { error: "/auth/error" },
+
   secret: process.env.NEXTAUTH_SECRET,
 };

@@ -10,6 +10,7 @@ export class AuthController {
 
       if (!email || !password) {
         console.error("Missing email or password");
+        
         return NextResponse.json(
           { message: "Email and password are required" },
           { status: 400 }

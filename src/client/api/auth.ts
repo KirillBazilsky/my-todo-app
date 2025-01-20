@@ -7,7 +7,7 @@ export const login = async (credentials: {
   password: string;
 }) => {
   try {
-    await signIn("credentials", { ...credentials, redirect: true });
+    await signIn("credentials", { ...credentials, redirect: false });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       errorManager.notify(`Login failed: ${error.response?.data?.message}`);

@@ -4,7 +4,8 @@ import { API_TASK_URL } from "../constatnts/api";
 
  export const getTasks = async() => {
     try {
-      const response = await axios.get(`${API_TASK_URL}`);
+      const response = await axios.get(API_TASK_URL);
+
       return response.data;
     } catch (error) {
       errorManager.notify(`Failed to fetch tasks: ${error}`);
@@ -14,7 +15,8 @@ import { API_TASK_URL } from "../constatnts/api";
 
   export const createTask = async(title: string) => {
     try {
-      const response = await axios.post(`${API_TASK_URL}`, { title });
+      const response = await axios.post(API_TASK_URL, { title });
+
       return response.data;
     } catch (error) {
       errorManager.notify(`Failed to create task: ${error}`);
@@ -27,6 +29,7 @@ import { API_TASK_URL } from "../constatnts/api";
       const response = await axios.patch(`${API_TASK_URL}/${taskId}`, {
         status,
       });
+      
       return response.data;
     } catch (error) {
       errorManager.notify(`Failed to update task status: ${error}`);
@@ -37,6 +40,7 @@ import { API_TASK_URL } from "../constatnts/api";
   export const deleteTask = async(taskId: number) => {
     try {
       const response = await axios.delete(`${API_TASK_URL}/${taskId}`);
+
       return response.data;
     } catch (error) {
       errorManager.notify(`Failed to delete task: ${error}`);

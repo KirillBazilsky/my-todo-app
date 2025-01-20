@@ -1,5 +1,6 @@
 "use client";
-import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
+
+import React, { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { errorManager } from "../utils/errorManager";
 
 type GlobalStateContextType = {
@@ -12,7 +13,7 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(
   undefined
 );
 
-export const GlobalStateProvider: React.FC<PropsWithChildren<object>> = ({
+export const GlobalStateProvider: FC<PropsWithChildren<object>> = ({
   children,
 }) => {
   const [error, setErrorState] = useState<string | null>(null);
@@ -38,8 +39,10 @@ export const GlobalStateProvider: React.FC<PropsWithChildren<object>> = ({
 
 export const useGlobalState = (): GlobalStateContextType => {
   const context = useContext(GlobalStateContext);
+
   if (!context) {
     throw new Error("useGlobalState must be used within a GlobalStateProvider");
   }
+  
   return context;
 };

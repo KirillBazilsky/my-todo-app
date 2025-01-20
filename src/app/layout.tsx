@@ -1,58 +1,29 @@
 "use client";
 
+import "@/global.css";
 import React from "react";
 import { GlobalStateProvider } from "@/client/context/GlobalStateContext";
-import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import Link from "next/link";
-import { styles } from "./styles.layout";
-import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
-import GlobalErrorModal from "./component/Error/Error";
-
+import GlobalErrorModal from "@/app/components/error/Error";
+import SessionNav from "@/app/components/SessionNav";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isActive = (path: string) => pathname === path;
-
   return (
-    <GlobalStateProvider>
-      <html lang="en">
-        <body className={styles.layout}>
-          <SessionProvider>
+    <SessionProvider>
+      <GlobalStateProvider>
+        <html lang="en" data-tailwind="true">
+          <body className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
             <GlobalErrorModal />
-            <nav className={styles.nav}>
-              <ul className={styles.navList}>
-                <li>
-                  <Link
-                    href="/user"
-                    className={
-                      isActive("/user") ? styles.navItemActive : styles.navItem
-                    }
-                  >
-                    User
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/tasks"
-                    className={
-                      isActive("/tasks") ? styles.navItemActive : styles.navItem
-                    }
-                  >
-                    Tasks
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-            <main className={styles.main}>{children}</main>
-          </SessionProvider>
-        </body>
-      </html>
-    </GlobalStateProvider>
+            <SessionNav />
+            <main className="flex-1">{children}</main>
+          </body>
+        </html>
+      </GlobalStateProvider>
+    </SessionProvider>
   );
 }

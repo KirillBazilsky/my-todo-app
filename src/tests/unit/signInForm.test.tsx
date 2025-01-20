@@ -2,15 +2,31 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { login } from "@/client/api/auth";
-import SignInForm from "@/app/user/components/SignInForm";
+import SignInForm from "@/app/components/auth/SignInForm";
+import { useRouter } from "next/navigation";
 
-// Mocking the login function
 jest.mock("@/client/api/auth", () => ({
   login: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
+
+beforeAll(() => {
+  window.location = { reload: jest.fn() } as unknown as Location;
+});
+
 describe("SignInForm", () => {
   it("should render the form inputs", () => {
+    const mockRouter = {
+      push: jest.fn(),
+      query: {},
+      pathname: "/sign-in",
+    };
+
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+
     render(<SignInForm />);
 
     expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
@@ -26,6 +42,7 @@ describe("SignInForm", () => {
     fireEvent.change(screen.getByPlaceholderText("Email"), {
       target: { value: "user@example.com" },
     });
+
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password123" },
     });

@@ -3,8 +3,10 @@
 import React from "react"; 
 import { login } from "@/client/api/auth";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
+  const router = useRouter();
    const [formData, setFormData] = useState({
      email: "",
      password: "",
@@ -12,16 +14,20 @@ const SignInForm = () => {
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSignIn = async (event: FormEvent) => {
     event.preventDefault();
     await login(formData);
+
+    router.push("/tasks");
   };
 
   return (
-    <form onSubmit={handleSignIn} className="form flex-wrapper">
+    <form onSubmit={handleSignIn} className="form flex-wrapper max-w-96">
+      <h4>Log in to your account</h4>
       <input
         type="email"
         name="email"

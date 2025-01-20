@@ -6,3 +6,5 @@ export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
   COMPLETED: "Completed",
   PAUSED: "Paused",
 };
+
+export const userKeys = ["Id", "Email", "First Name", "Last Name"];
