@@ -24,7 +24,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=postgresql://root:rootpassword@postgres:5432/mytodoapp
-    command: ["sh", "-c", "npx prisma migrate deploy && npm install && npm run build && npm run start"]
+    command: ["sh", "-c", "npx prisma migrate deploy && npm install && npm test && npm run build && npm run start"]
     networks:
       - my-todo-app_default
     depends_on:

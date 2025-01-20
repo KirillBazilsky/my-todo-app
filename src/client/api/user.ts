@@ -1,17 +1,29 @@
 import axios from "axios";
-import { useSession, signIn } from "next-auth/react";
-import { errorManager } from "../utils/errorManager";
+import { signIn } from "next-auth/react";
+import { errorManager } from "@/client/utils/errorManager";
+import { useEffect, useState } from "react";
+import { IUser } from "@/client/interfaces/user";
 
-export const getUser = async() => {
-    const {data: session} = await useSession();
+export function useUser() {
+  const [user, setUser] = useState<IUser | null>(null);
+  const [status, setStatus] = useState<string>("loading");
 
-    if (!session || !session.user?.id) {
-      return
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const response = await axios.get("/api/user"); 
+        setUser(response.data);
+        setStatus("authenticated");
+      } catch (error) {
+        setStatus("unauthenticated");
+        console.error("Error fetching user data:", error);
+      }
     }
 
-    const response = await axios.get("/api/user");
+    fetchUserData();
+  }, []);
 
-    return response.data
+  return { user, status };
 }
 
 export const register = async (user: {

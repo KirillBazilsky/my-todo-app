@@ -1,94 +1,83 @@
-import React from "react";
+import React, { FC, ReactNode } from "react";
 import "@testing-library/jest-dom";
-import { render, screen, waitFor, act } from "@testing-library/react";
-import { getUser } from "@/client/api/user";
-import { useSession } from "next-auth/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { useUser } from "@/client/api/user";
+import { SessionProvider } from "next-auth/react";
 import UserInfo from "@/app/user/components/UserInfo";
+import { Session } from "next-auth";
 
-// Мокаем необходимые модули
+interface IMockSessionProviderProps {
+  session: Session | null;
+  children: ReactNode;
+}
+
 jest.mock("@/client/api/user", () => ({
-  getUser: jest.fn(),
+  useUser: jest.fn(),
 }));
 
-jest.mock("next-auth/react", () => ({
-  useSession: jest.fn(),
-}));
-
-beforeAll(() => {
-  window.history.pushState({}, "", window.location.href);
-});
+const MockSessionProvider: FC<IMockSessionProviderProps> = ({
+  session,
+  children,
+}) => <SessionProvider session={session}>{children}</SessionProvider>;
 
 describe("UserInfo", () => {
-  it("should display loading message when session is loading", () => {
-    // Мокаем сессию в состоянии загрузки
-    (useSession as jest.Mock).mockReturnValue({
-      data: null,
+  it("should display a loading message when session is loading", () => {
+    (useUser as jest.Mock).mockReturnValue({
+      user: null,
       status: "loading",
     });
 
-    render(<UserInfo />);
+    render(
+      <MockSessionProvider session={null}>
+        <UserInfo />
+      </MockSessionProvider>
+    );
 
-    // Проверяем, что отображается сообщение о загрузке
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
-  it("should display not logged in message when no session is available", () => {
-    // Мокаем сессию как неактивную (пользователь не залогинен)
-    (useSession as jest.Mock).mockReturnValue({
-      data: null,
+  it("should display a not-logged-in message when no user is available", () => {
+    (useUser as jest.Mock).mockReturnValue({
+      user: null,
       status: "authenticated",
     });
 
-    render(<UserInfo />);
+    render(
+      <MockSessionProvider session={null}>
+        <UserInfo />
+      </MockSessionProvider>
+    );
 
-    // Проверяем, что отображается сообщение о том, что пользователь не залогинен
     expect(screen.getByText("You are not logged in.")).toBeInTheDocument();
   });
 
-  it("should display user info when user is logged in and data is fetched", async () => {
-    // Мокаем данные пользователя
+  it("should display user info when user is logged in", async () => {
     const mockUser = {
       firstName: "John",
       lastName: "Doe",
       email: "john.doe@example.com",
     };
-    // Мокаем ответ от getUser
-    (getUser as jest.Mock).mockResolvedValue(mockUser);
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: mockUser },
-      status: "authenticated",
-    });
 
-    await act(async () => {
-      render(<UserInfo />);
-    });
-
-    await waitFor(() => expect(getUser).toHaveBeenCalledTimes(1));
-
-    expect(screen.getByText(/Welcome, John Doe/)).toBeInTheDocument();
-    expect(screen.getByText("User info:")).toBeInTheDocument();
-    expect(screen.getByText("firstName")).toBeInTheDocument();
-    expect(screen.getByText("lastName")).toBeInTheDocument();
-    expect(screen.getByText("email")).toBeInTheDocument();
-  });
-
-  it("should display user properties in a table", async () => {
-    const mockUser = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
+    const mockSession = {
+      user: mockUser,
+      expires: "2100-01-01T00:00:00.000Z",
     };
-    (getUser as jest.Mock).mockResolvedValue(mockUser);
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: mockUser },
+
+    (useUser as jest.Mock).mockReturnValue({
+      user: mockUser,
       status: "authenticated",
     });
 
-    await act(async () => {
-      render(<UserInfo />);
-    });
+    render(
+      <MockSessionProvider session={mockSession}>
+        <UserInfo />
+      </MockSessionProvider>
+    );
 
-    await waitFor(() => expect(getUser).toHaveBeenCalledTimes(2));
+    await waitFor(() => {
+      expect(screen.getByText(/Welcome, John Doe/)).toBeInTheDocument();
+      expect(screen.getByText("User info:")).toBeInTheDocument();
+    });
 
     expect(screen.getByText("firstName")).toBeInTheDocument();
     expect(screen.getByText("lastName")).toBeInTheDocument();
