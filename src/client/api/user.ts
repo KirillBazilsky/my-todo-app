@@ -16,7 +16,7 @@ export function useUser() {
         setStatus("authenticated");
       } catch (error) {
         setStatus("unauthenticated");
-        console.error("Error fetching user data:", error);
+        errorManager.notify(`Error fetching user data: ${error}`);
       }
     }
 
