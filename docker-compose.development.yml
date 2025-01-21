@@ -3,6 +3,7 @@ services:
   postgres:
     image: postgres:13
     container_name: postgres
+    env_file: .env
     ports:
       - "5432:5432"
     environment:
@@ -18,6 +19,7 @@ services:
     image: node:18
     container_name: nextjs
     working_dir: /app
+    env_file: .env
     volumes:
       - .:/app:rw
     ports:
